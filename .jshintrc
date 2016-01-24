@@ -1,0 +1,12 @@
+{
+  "globals": {
+    "strict": true,
+    "angular": false,
+    "require": false,
+    "module": false,
+    "describe": false,
+    "it": false,
+    "beforeEach": false,
+    "expect": false
+  }
+}

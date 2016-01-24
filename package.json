@@ -1,0 +1,35 @@
+{
+  "name": "t",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-angular-templates": "^1.0.2",
+    "grunt-browserify": "^4.0.1",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-clean": "^0.7.0",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-copy": "^0.8.2",
+    "grunt-contrib-jshint": "^0.12.0",
+    "grunt-htmlclean": "^2.7.6",
+    "grunt-string-replace": "^1.2.1",
+    "jshint-stylish": "^2.1.0"
+  },
+  "dependencies": {
+    "angular": "^1.4.9",
+    "angular-loading-bar": "^0.8.0",
+    "angular-ui-bootstrap": "^1.1.0",
+    "angular-ui-router": "^0.2.15",
+    "bootstrap": "^3.3.6",
+    "gmaps": "^0.4.22",
+    "gmaps.core": "^0.5.1",
+    "gmaps.markers": "^0.5.0",
+    "lodash": "^3.10.1"
+  }
+}

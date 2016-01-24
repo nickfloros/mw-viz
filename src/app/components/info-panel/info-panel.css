@@ -1,0 +1,49 @@
+#info-panel {
+    height: 100%;
+    width: calc(30% - 1px);
+    background: #202226;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    z-index: 1001;
+
+    overflow: hidden;
+
+    color: #fff;
+
+    padding: 30px 40px 40px 40px;
+}
+
+#info-panel.ng-hide-add.ng-hide-add-active,
+#info-panel.ng-hide-remove.ng-hide-remove-active {
+  -webkit-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+}
+
+#info-panel.ng-hide {
+  right: -25%;
+}
+
+#info-panel .btn-group.controls {
+  padding: 0;
+}
+
+#info-panel h1 {
+  font-size: 40px;
+}
+
+#info-panel table {
+  width: 100%;
+}
+
+#info-panel th {
+  font-size: 20px;
+  color: #ffcc00;
+}
+
+#info-panel td {
+  font-size: 15px;
+  width: 33%;
+}
