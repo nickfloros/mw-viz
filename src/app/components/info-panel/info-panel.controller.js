@@ -21,6 +21,9 @@ module.exports = angular.module('info-panel-controller-module', [
 		aroads: function() {
 			return RoadsService.aroads();
 		},
+		reset : function() {
+			MappingService.reset();
+		},
 		geocodeList : function() {
 			return MappingService.geocodeList();
 		},

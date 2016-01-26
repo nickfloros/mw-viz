@@ -5,17 +5,36 @@ var _ = require('lodash');
 module.exports = angular.module('mapping-service-module', [])
 	.service('MappingService', ['$http', '$interval', '$window', '$q', function MappingService($http, $interval, $window, $q) {
 		var svc = this,
+			_placeSearch ,
 			_geocodeList = [],
-			_map, _heatmap, _breakdownMarker,
+			_placesMarker = [],
+			_map, _heatmap, _breakdownMarker, infoWindow,
 			_geocoder = new google.maps.Geocoder();
-			_pointArray = new google.maps.MVCArray([]),
+			_pointArray = new google.maps.MVCArray([]);
 
+			function createPlacesMarker(place) {
+  			var placeLoc = place.geometry.location;
+  			var marker = new google.maps.Marker({
+    			map: _map,
+    			position: place.geometry.location
+  			});
 
+  			google.maps.event.addListener(marker, 'click', function() {
+    			infowindow.setContent(place.name);
+    			infowindow.open(_map, this);
+  			});
+
+				_placesMarker.push(place);
+			}
+			infowindow = new google.maps.InfoWindow();
 		_.extend(svc, {
 			data: function dataAcessor() {
 				return _pointArray;
 			},
 			map: function mapAcessor(val) {
+				if (arguments.length) {
+					_placesSearch = new google.maps.places.PlacesService(val);
+				}	
 				return arguments.length ? _map = val : _map;
 			},
 			breakDownMarker: function breakdownMarkerAcessor(val) {
@@ -32,8 +51,24 @@ module.exports = angular.module('mapping-service-module', [])
 			geocodeList : function() {
 				return _geocodeList;
 			},
+		reset : function() {
+			_placesSearch = [];
+			_geocoderList = [];
+			},	
 			geocode : function (latLng) {
 				var deferred = $q.defer();
+
+				_placesSearch.nearbySearch({
+					location:latLng,
+					radius : 100
+				}, function (results,status) {
+					if (status === google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < results.length; i++) {
+      createPlacesMarker(results[i]);
+    }
+  }
+					});
+					
 				_geocoder.geocode({latLng : latLng}, function (results, status) {
 					if (status==='OK') {
 						_.forEach(results,function(item) {

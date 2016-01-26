@@ -18,6 +18,7 @@
             <select ng-model="ctrl.locationTypeObj" ng-model-options="ctrl.modelOptions" ng-options="item.name for item in ctrl.refData().locationTypes"></select>  
             <select  ng-model="ctrl.recordTypeObj" ng-model-options="ctrl.modelOptions" ng-options="item.name for item in ctrl.refData().recordTypes"></select>          
         </div>
+	<button class="button button-default" ng-click="ctrl.reset()">Reset results</button>
 	<div class="row" ng-repeat="entry in ctrl.geocodeList()" ng-model-options="ctrl.modelOptions">
 		<span class="label info-label">{{entry.text}}</span>
 	</div>
