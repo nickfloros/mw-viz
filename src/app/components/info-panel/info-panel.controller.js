@@ -3,7 +3,8 @@ var _ = require('lodash');
 
 module.exports = angular.module('info-panel-controller-module', [
 	require('../../services/roads.service').name,
-]).controller('infoPanelController', ['RoadsService', function(RoadsService) {
+	require('../../services/mapping.service').name,
+]).controller('infoPanelController', ['RoadsService','MappingService', function(RoadsService,MappingService) {
 	var ctrl = this,
 		_motorwayObj = null,
 		_road = '',
@@ -19,6 +20,9 @@ module.exports = angular.module('info-panel-controller-module', [
 		},
 		aroads: function() {
 			return RoadsService.aroads();
+		},
+		geocodeList : function() {
+			return MappingService.geocodeList();
 		},
 		motorwayObj: function(val) {
 			if (arguments.length) {

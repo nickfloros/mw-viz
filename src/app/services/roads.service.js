@@ -12,7 +12,7 @@ module.exports=angular.module('roads-service-module',[])
 				locationTypes : [],
 				recordTypes : []
 			};
-
+/*
 		$http.get('/api/dangerousRoads')
 			.then(function (dataSet) {
 				_.forEach(dataSet.data, function (item){
@@ -29,7 +29,7 @@ module.exports=angular.module('roads-service-module',[])
 			_refData.locationTypes= resp.data.locationTypes;
 			_refData.recordTypes = resp.data.recordTypes;
 		});
-
+*/
 		_.extend(_svc, {
 			motorways : function() {
 				return _motorways;

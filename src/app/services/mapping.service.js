@@ -3,43 +3,12 @@ require('angular');
 var _ = require('lodash');
 
 module.exports = angular.module('mapping-service-module', [])
-	.service('MappingService', ['$http', '$interval', '$window', function MappingService($http, $interval, $window) {
+	.service('MappingService', ['$http', '$interval', '$window', '$q', function MappingService($http, $interval, $window, $q) {
 		var svc = this,
+			_geocodeList = [],
 			_map, _heatmap, _breakdownMarker,
-			_url = 'https://api.twitter.com/1.1/search/tweets.json',
-			_query = '?q=breakdown&result_type=mixed&count=100&geocode=53.711231,-3.680420,500mi',
+			_geocoder = new google.maps.Geocoder();
 			_pointArray = new google.maps.MVCArray([]),
-			_offsetCenter = function offsetCenter(latlng, offsetx) {
-				var scale = Math.pow(2, _map.getZoom()),
-					nw = new google.maps.LatLng(
-						_map.getBounds().getNorthEast().lat(),
-						_map.getBounds().getSouthWest().lng()
-					),
-					worldCoordinateCenter = _map.getProjection().fromLatLngToPoint(latlng),
-					pixelOffset = new google.maps.Point((offsetx / scale) || 0, (0 / scale) || 0),
-					worldCoordinateNewCenter = new google.maps.Point(
-						worldCoordinateCenter.x - pixelOffset.x,
-						worldCoordinateCenter.y + pixelOffset.y
-					);
-
-				return _map.getProjection().fromPointToLatLng(worldCoordinateNewCenter);
-			};
-
-				/*$http.post('/obsidian/rest-api/london.php', {
-				    url: _url,
-				    query: _query
-				}).success(function (data) {
-				    _.forEach(data.statuses, function (n, i) {
-				        var geo;
-
-				        if (n.geo) {
-				            geo = n.geo.coordinates;
-				            _pointArray.push(new google.maps.LatLng(geo[0], geo[1]));
-				        }
-				    });
-				});*/
-	
-
 
 
 		_.extend(svc, {
@@ -60,61 +29,44 @@ module.exports = angular.module('mapping-service-module', [])
 
 				return _heatmap;
 			},
-			getAAPoi: function getAAPoi() {
-				// remove pre-existing poi for house-keeping purposes
-				_map.data.forEach(function(feature) {
-					_map.data.remove(feature);
+			geocodeList : function() {
+				return _geocodeList;
+			},
+			geocode : function (latLng) {
+				var deferred = $q.defer();
+				_geocoder.geocode({latLng : latLng}, function (results, status) {
+					if (status==='OK') {
+						_.forEach(results,function(item) {
+								var text=[];
+								var marker , line;
+							_.forEach(item.address_components,function (a) {
+								 text.push(a.long_name + '('+a.types.join()+')');
+								});
+							text.push('locationType : '+item.geometry.location_type);
+						line = new google.maps.Polyline({path:[{lat:latLng.lat(), lng:latLng.lng()},
+					{lat:item.geometry.location.lat(), lng:item.geometry.location.lng()}],
+					map:_map,
+					geodesic : true,
+					strokeColor : '#FF0000',
+					strokeOpacity : 1.0,
+					strockWeight: 1});
 
+	text.push('types : '+item.types.join());
+							console.log(text.join());
+							marker = new google.maps.Marker({
+          map: _map,
+					title : text.join(),
+          position: item.geometry.location,
+					icon : 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+_geocodeList.length+'|FF0000|000000'
+        });
+											_geocodeList.push({text : _geocodeList.length + '-'+text.join(),
+																	marker : marker,
+															line : line});
+						});
+						deferred.resolve(_geocodeList);
+					}
 				});
-
-				$http.post('/obsidian/rest-api/locations.php', {
-					lat1: _map.getBounds().getNorthEast().lat(),
-					lon1: _map.getBounds().getNorthEast().lng(),
-
-					lat2: _map.getBounds().getSouthWest().lat(),
-					lon2: _map.getBounds().getSouthWest().lng(),
-				}).then(function(data) {
-					var poi = data.data.data;
-
-					// convert to geoJSON
-					// TODO: move this to the server
-					_.forEach(poi, function(n, i) {
-						n.type = 'Feature';
-						n.geometry = {
-							type: 'Point',
-							coordinates: [n.coordinate.longitude, n.coordinate.latitude]
-						};
-
-						n.properties = {
-							poiDetails: n.poiDetails,
-							address: n.address
-						}
-
-						delete n.poiDetails;
-						delete n.address;
-						delete n.coordinate;
-					});
-
-					_map.data.addGeoJson({
-						type: "FeatureCollection",
-						features: poi
-					});
-
-					_map.data.setStyle(function(feature) {
-						return {
-							icon: {
-								path: 'M317.7,420.6l-19.8-18.4l-20.4,19l3.9-3.6v22.8h32.5V417L317.7,420.6z',
-								fillColor: '#202226',
-								fillOpacity: 0.8,
-								scale: 1,
-								strokeColor: '#202226',
-								strokeWeight: 1,
-								scale: 0.5,
-								anchor: new google.maps.Point(10, 10)
-							}
-						};
-					});
-				});
+				return deferred.promise;
 			},
 			removePOI: function removePOI() {
 				_map.data.forEach(function(feature) {
