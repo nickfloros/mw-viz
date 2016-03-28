@@ -1,75 +1,44 @@
-html, body {
-  height: 100%;
 
-  font: 1.5rem/1.5em "Source Sans Pro",Helvetica,Arial,sans-serif;
-
-  line-height: 30px;
-}
-
-[ng-app]{
+html,body{
     height:100%;
 }
 
-.angular-leaflet-map {
-    height: 100%;
+body{
+    padding-top:50px; /*padding for navbar*/
 }
 
-.nopadding {
-    padding: 0;
+.navbar-custom .icon-bar {
+  background-color:#fff;
 }
 
-*[ui-sref] {
-    cursor: pointer;
+.navbar-custom {
+  background-color: #168ccc;
+    color:#fff;
 }
 
-*[ui-sref]:hover {
-    background: #6b6c70;
+.navbar-custom li>a:hover,.navbar-custom li>a:focus {
+  background-color:#49bfff;
 }
 
-.fullHeight {
-    height: 100%;
+.navbar-custom a{
+    color:#fefefe;
 }
 
-#loading-bar .bar {
-  background: #ffcc00 !important;
-  z-index: 2000 !important;
-  height: 5px !important;
+.navbar-custom .form-control:focus {
+  border-color: #49bfff;
+  outline: 0;
+  -webkit-box-shadow: inset 0 0 0;
+  box-shadow: inset 0 0 0;
 }
 
-/* Fancy blur effect */
-#loading-bar .peg {
-  -moz-box-shadow: #ffcc00 1px 0 6px 1px !important;
-  -ms-box-shadow: #ffcc00 1px 0 6px 1px !important;
-  -webkit-box-shadow: #ffcc00 1px 0 6px 1px !important;
-  box-shadow: #ffcc00 1px 0 6px 1px !important;
+#main, #main>.row {
+  height:100%;
 }
 
-.logo {
-    height: 40px;
-    width: 40px;
-    margin-right: 1px;
-
-    float: left;
-
-    border: none;
+#main>.row {
+    overflow-y:scroll;
 }
 
-h1, h2, h3 {
-  font-weight: 100;
-}
-
-h3 {
-  font-size: 15px;
-}
-
-.hover {
-  -webkit-transition: all linear 0.25s;
-  transition: all linear 0.25s;
-
-  cursor: pointer;
-}
-
-.hover:hover {
-  color: #ffcc00;
-  background-color: #202226 !important;
+#left {
+  height:100%;
 }
