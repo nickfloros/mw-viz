@@ -63,11 +63,11 @@ module.exports = angular.module('mapping-service-module', [])
 					radius : 100
 				}, function (results,status) {
 					if (status === google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < results.length; i++) {
-      createPlacesMarker(results[i]);
-    }
-  }
-					});
+				    for (var i = 0; i < results.length; i++) {
+				      createPlacesMarker(results[i]);
+				    }
+				  }
+				});
 					
 				_geocoder.geocode({latLng : latLng}, function (results, status) {
 					if (status==='OK') {
@@ -85,7 +85,7 @@ module.exports = angular.module('mapping-service-module', [])
 					strokeColor : '#FF0000',
 					strokeOpacity : 1.0,
 					strockWeight: 1});
-
+ 
 	text.push('types : '+item.types.join());
 							console.log(text.join());
 							marker = new google.maps.Marker({
