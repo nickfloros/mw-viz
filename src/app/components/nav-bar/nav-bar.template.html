@@ -26,9 +26,11 @@
                       <a ng-click="ctrl.dataSet(option)">{{option}}</a>
                     </li>
                 </ul>
-                <input type="text" class="form-control" placeholder="What are searching for?">
+                <input type="text" class="form-control"  
+                    ng-model-options="ctrl.modelOptions" ng-model="ctrl.searchTerm" 
+                    placeholder="{{ctrl.searchTermPlaceHolder()}}" />
             </div>                
-            <button type="button" class="btn btn-primary">
+            <button type="button" class="btn btn-primary" ng-click="ctrl.search()">
                 <span class="glyphicon glyphicon-search"></span>
             </button>                
           </div>
