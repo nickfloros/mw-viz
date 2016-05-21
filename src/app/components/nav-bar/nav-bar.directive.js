@@ -1,12 +1,13 @@
 require('angular');
 
 module.exports = angular.module('nav-bar-module', [
+    require('../search-options/search-options.directive').name,
 	require('./nav-bar.controller').name
-	]).directive('infoPanel', [function InfoPanelDirective() {
+	]).directive('navBar', [function NavBarDirective() {
     return {
         restrict: 'E',
         replace: true,
-        templateUrl: 'partials/nav-bar-panel.template.html',
+        templateUrl: 'partials/nav-bar.template.html',
         controller: 'navBarController',
         scope: {},
         controllerAs: 'ctrl',

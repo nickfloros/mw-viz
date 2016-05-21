@@ -16,6 +16,7 @@ angular.module('road-mapper', [
 	// directives ..
 	require('./components/mapping/mapping.directive').name,
 	require('./components/info-panel/info-panel.directive').name,
+	require('./components/nav-bar/nav-bar.directive').name
 ]).config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
 	cfpLoadingBarProvider.includeSpinner = false;
 }]);
