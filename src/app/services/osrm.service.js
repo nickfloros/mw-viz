@@ -2,17 +2,20 @@ require('angular');
 
 var _=require('lodash');  
 
-module.exports=angular.module('roads-service-module',[])
-	.service('RoadsService',['$http', function($http) {
+module.exports=angular.module('osrm-service-module',[])
+	.service('OSRMService',['$http', function($http) {
 		var _svc = this;
 			_nodes = [],
 			_ways=[];
 
 		_.extend(_svc, {
-			find : function(swPoint, nePoint) {
-				$http.get('/api/osrm', function(dataSet) {
+			find : function(bounds) {
+				return $http.post('/api/osrm', {
+					bounds : bounds.toJSON()
+				})
+				.then(function (resp) {
 
-				});
+					});
 			},
 			nodes : function() {
 				return _nodes;

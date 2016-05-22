@@ -3,9 +3,10 @@ require('angular');
 var _ = require('lodash');
 
 module.exports = angular.module('osrm-controller-module', [
-		require('../../services/mapping.service').name
+		require('../../services/mapping.service').name,
+		require('../../services/osrm.service').name,
 	])
-	.controller('osrmController', ['MappingService', function (MappingService) {
+	.controller('osrmController', ['MappingService', 'OSRMService', function (MappingService, OSRNService) {
 		var ctrl = this,
 			_toggleBoundingBox = 0;
 
@@ -19,6 +20,9 @@ module.exports = angular.module('osrm-controller-module', [
 					}
 				}
 				return arguments.length ? _toggleBoundingBox = val : _toggleBoundingBox;
+			},
+			boundingBox : function() {
+				return MappingService.boundingBox().bounds();
 			},
 			modelOptions: {
 				getterSetter: true

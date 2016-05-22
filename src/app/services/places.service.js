@@ -44,8 +44,8 @@ module.exports = angular.module('places-service-module', [])
 							});
 
 							google.maps.event.addListener(marker, 'dragend', function (eventDetails) {
-								place.geometry.location.lat(event.latLng.lat());
-								place.geometry.location.lng(event.latLng.lng());
+								place.geometry.location.lat(eventDetails.latLng.lat());
+								place.geometry.location.lng(eventDetails.latLng.lng());
 							});
 
 							google.maps.events.addListener(marker, 'dragstart', function (eventDetails) {

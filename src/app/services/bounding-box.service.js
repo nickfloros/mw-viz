@@ -3,7 +3,7 @@ require('angular');
 var _ = require('lodash');
 
 module.exports = angular.module('bounding-box-service-module', [])
-	.service('BoundingBoxService', [function BoundingBoxService() {
+	.service('BoundingBoxService', ['$rootScope', function BoundingBoxService($rootScope) {
 		var svc = this,
 			_rightClickEvent = null,
 			_eventListener = null,
@@ -30,19 +30,33 @@ module.exports = angular.module('bounding-box-service-module', [])
 					};
 					_rectangle.setBounds(_bounds);
 					_rectangle.setMap(map);
+					_eventListener = _rectangle.addListener('dragend', function (eventDetails) {
+						_bounds.north = _rectangle.getBounds().getNorthEast().lat();
+						_bounds.east = _rectangle.getBounds().getNorthEast().lng();
+						_bounds.south = _rectangle.getBounds().getSouthWest().lat();
+						_bounds.west = _rectangle.getBounds().getSouthWest().lng();
+						// because geocode is outside angular's control
+						if (!$rootScope.$$phase) {
+							$rootScope.$apply();
+						}
+					});
 				});
 			},
 			dissable: function dissableBoundingBox(map) {
+				_rectangle.setDraggable(false);
 				google.maps.event.removeListener(_rightClickEvent);
+				_rightClickEvent=null;
+				if (_eventListener) {
+					google.maps.event.removeListener(_eventListener);
+					_eventListener = null;
+				}
 			},
 			setPosition: function setPosition(map, latLng) {
 				_rectangle.bounds.north = latLng.lat();
 				_rectangle.bounds.south = latLng.lat();
 				_rectangle.bounds.east = latLng.lng();
 				_rectangle.bounds.west = latLng.lng();
-				_eventListener = _rectangle.addListener('bounds_chnaged', function (eventDetails) {
 
-				});
 			},
 			bounds: function bounds(val) {
 				return arguments.length ? _bounds = bounds : _bounds;
