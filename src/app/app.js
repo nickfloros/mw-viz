@@ -11,7 +11,7 @@ angular.module('road-mapper', [
 
 	// routes 
 	require('./routes/home/home.route').name,
-	require('./routes/link/link.route').name,
+	require('./routes/osrm/osrm.route').name,
 
 	// directives ..
 	require('./components/mapping/mapping.directive').name,
