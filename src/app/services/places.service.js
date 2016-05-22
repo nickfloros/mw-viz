@@ -23,7 +23,9 @@ module.exports = angular.module('places-service-module',[])
 								// create google marker
 								marker = new google.maps.Marker({
 									map: map, 
-									position : place.geometry.location
+									position : place.geometry.location,
+									animation: google.maps.Animation.DROP,
+									draggable: true
 								});
 
 								// add event listener pop info window ..
@@ -31,6 +33,11 @@ module.exports = angular.module('places-service-module',[])
 									_infoWindow.setContent(place.name) ;
 									_infoWindow.open(map, this);
 									_selectedPlace = place;
+								});
+
+								google.maps.event.addListener(marker,'dragend', function (eventDetails) {
+									console.log('moving marker ..');
+
 								});
 
 								_places.push(place);
