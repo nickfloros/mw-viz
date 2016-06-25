@@ -8,18 +8,10 @@ module.exports = angular.module('mapping-controller', [
 		var ctrl = this,
 			_editableLocation = false,
 			_placeList = [],
-			_geocodeList = [],
+			_geocodeList = [];
 
-			mapOptions = {
-				zoomControl: true,
-				zoom: 6,
-				center: new google.maps.LatLng(53.881463, -4.196777),
-				mapTypeId: google.maps.MapTypeId.ROADMAP,
-				disableDefaultUI: true
-			};
-
-		MappingService.map(new google.maps.Map(document.getElementById('gmap'), mapOptions));
-
+		MappingService.init(document.getElementById('gmap'));
+		
 		MappingService.map().addListener('click', function (event) {
 
 			MappingService.geocode(event.latLng)

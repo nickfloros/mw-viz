@@ -9,9 +9,24 @@ module.exports = angular.module('mapping-service-module', [
 	])
 	.service('MappingService', ['$http', '$interval', '$window', '$q', 'PlacesService', 'GeocoderService', 'BoundingBoxService', function MappingService($http, $interval, $window, $q, PlacesService, GeocoderService, BoundingBoxService) {
 		var svc = this,
-			_map;
+			_directionsDisplay,
+			_map,
+			mapOptions = {
+				zoomControl: true,
+				zoom: 6,
+				center: new google.maps.LatLng(53.881463, -4.196777),
+				mapTypeId: google.maps.MapTypeId.ROADMAP,
+				disableDefaultUI: true
+			};
 
 		_.extend(svc, {
+			init : function int(elementId) {
+				// insta
+				_map = new google.maps.Map(elementId, mapOptions);
+				// create route display
+			  _directionsDisplay = new google.maps.DirectionsRenderer();
+				_directionsDisplay.setMap(map);
+			},
 			boundingBox: function () {
 				return BoundingBoxService;
 			},
@@ -45,6 +60,9 @@ module.exports = angular.module('mapping-service-module', [
 					_map.data.remove(feature);
 
 				});
+			},
+			directionsDisplay : function directionsDisplayAccessor() {
+				return _directionsDisplay;
 			},
 			setCenter: function setCenter(latLng) {
 				_map.setCenter(_offsetCenter(latLng, 0 - $window.innerWidth / 4));

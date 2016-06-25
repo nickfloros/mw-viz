@@ -12,7 +12,8 @@ angular.module('road-mapper', [
 	// routes 
 	require('./routes/home/home.route').name,
 	require('./routes/osrm/osrm.route').name,
-
+	require('./routes/smart-motorways/smart-motorways.route').name,
+	
 	// directives ..
 	require('./components/mapping/mapping.directive').name,
 	require('./components/info-panel/info-panel.directive').name,

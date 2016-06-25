@@ -1,0 +1,19 @@
+<h2>Smart motorways</h2>
+
+<button type="button" class="btn btn-primary" ng-model="ctrl.toggleBoundingBox" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ng-model-options="ctrl.modelOptions" >
+        Activate bounding box
+    </button>
+
+<button ng-click="ctrl.getOSRM()">Get ORSM data</button>
+
+<div class="row">
+		<span class="col-md-4">North East</span>
+		<span class="col-md-4">{{ctrl.boundingBox().north.toFixed(6)}}</span>
+		<span class="col-md-4">{{ctrl.boundingBox().east.toFixed(6)}}</span>
+</div>
+
+<div class="row">
+		<span class="col-md-4">South West</span>
+		<span class="col-md-4">{{ctrl.boundingBox().south.toFixed(6)}}</span>
+		<span class="col-md-4">{{ctrl.boundingBox().west.toFixed(6)}}</span>
+</div>
