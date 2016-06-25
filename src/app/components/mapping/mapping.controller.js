@@ -11,17 +11,19 @@ module.exports = angular.module('mapping-controller', [
 			_geocodeList = [];
 
 		MappingService.init(document.getElementById('gmap'));
-		
-		MappingService.map().addListener('click', function (event) {
 
-			MappingService.geocode(event.latLng)
-				.then(function (dataSet) {
-					// because geocode is outside angular's control
-					if (!$rootScope.$$phase) {
-						$rootScope.apply();
-					}
+		/*
+		 		MappingService.map().addListener('click', function (event) {
+
+					MappingService.geocode(event.latLng)
+						.then(function (dataSet) {
+							// because geocode is outside angular's control
+							if (!$rootScope.$$phase) {
+								$rootScope.apply();
+							}
+						});
 				});
-		});
+		*/
 
 		_.extend(ctrl, {
 			placeList: function () {},
@@ -29,4 +31,5 @@ module.exports = angular.module('mapping-controller', [
 				return MappingService.geocodeList();
 			}
 		});
+
 	}]);

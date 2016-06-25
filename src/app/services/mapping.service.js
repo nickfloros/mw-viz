@@ -11,6 +11,12 @@ module.exports = angular.module('mapping-service-module', [
 		var svc = this,
 			_directionsDisplay,
 			_map,
+			_mapEvents = {
+				click: null,
+				rightclick: null,
+				dragend: null,
+				dragstart: null
+			},
 			mapOptions = {
 				zoomControl: true,
 				zoom: 6,
@@ -20,12 +26,32 @@ module.exports = angular.module('mapping-service-module', [
 			};
 
 		_.extend(svc, {
-			init : function int(elementId) {
+			init: function int(elementId) {
 				// insta
 				_map = new google.maps.Map(elementId, mapOptions);
 				// create route display
-			  _directionsDisplay = new google.maps.DirectionsRenderer();
-				_directionsDisplay.setMap(map);
+				_directionsDisplay = new google.maps.DirectionsRenderer();
+				_directionsDisplay.setMap(_map);
+			},
+			removeAllEvents: function () {
+				if (_mapEvents.click) {
+					google.maps.event.removeListener(_mapEvents.click);
+					_mapEvents.click = null;
+				}
+				if (_mapEvents.rightclick) {
+					google.maps.event.removeListener(_mapEvents.rightclick);
+					_mapEvents.rightclick = null;
+				}
+			},
+			bindEvent: function (eventType, cbFunction) {
+				if (_mapEvents[eventType]) {
+					google.maps.event.removeListener(_mapEvents[eventType]);
+					_mapEvents[eventType] = null;
+				}
+
+				if (_mapEvents[eventType] === null) {
+					_mapEvents[eventType] = google.maps.event.addListener(_map, eventType, cbFunction);
+				}
 			},
 			boundingBox: function () {
 				return BoundingBoxService;
@@ -61,7 +87,7 @@ module.exports = angular.module('mapping-service-module', [
 
 				});
 			},
-			directionsDisplay : function directionsDisplayAccessor() {
+			directionsDisplay: function directionsDisplayAccessor() {
 				return _directionsDisplay;
 			},
 			setCenter: function setCenter(latLng) {
