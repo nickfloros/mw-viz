@@ -33,7 +33,7 @@ module.exports = angular.module('mapping-service-module', [
 				_directionsDisplay = new google.maps.DirectionsRenderer();
 				_directionsDisplay.setMap(_map);
 			},
-			removeAllEvents: function () {
+			removeAllEvents: function() {
 				if (_mapEvents.click) {
 					google.maps.event.removeListener(_mapEvents.click);
 					_mapEvents.click = null;
@@ -43,7 +43,7 @@ module.exports = angular.module('mapping-service-module', [
 					_mapEvents.rightclick = null;
 				}
 			},
-			bindEvent: function (eventType, cbFunction) {
+			bindEvent: function(eventType, cbFunction) {
 				if (_mapEvents[eventType]) {
 					google.maps.event.removeListener(_mapEvents[eventType]);
 					_mapEvents[eventType] = null;
@@ -53,7 +53,7 @@ module.exports = angular.module('mapping-service-module', [
 					_mapEvents[eventType] = google.maps.event.addListener(_map, eventType, cbFunction);
 				}
 			},
-			boundingBox: function () {
+			boundingBox: function() {
 				return BoundingBoxService;
 			},
 			data: function dataAcessor() {},
@@ -82,18 +82,26 @@ module.exports = angular.module('mapping-service-module', [
 			},
 			geocodeList: GeocoderService.results,
 			selectedPlace: PlacesService.selectedPlace,
-			reset: function () {
+			reset: function() {
 				PlacesService.reset();
 				GeocoderService.reset();
 			},
-			geocode: function (latLng) {
+			geocode: function(latLng) {
 				PlacesService.search(_map, latLng, 100);
 				return GeocoderService.search(_map, latLng);
 			},
 			removePOI: function removePOI() {
-				_map.data.forEach(function (feature) {
+				_map.data.forEach(function(feature) {
 					_map.data.remove(feature);
 
+				});
+			},
+			drawRoute: function(route) {
+				_map.data.addGeoJson(route.geoJSON);
+				_map.data.setStyle({
+					strokeColor: 'blue',
+					strokeOpacity: 0.2,
+					strokeWeight: 10
 				});
 			},
 			directionsDisplay: function directionsDisplayAccessor() {
@@ -104,6 +112,12 @@ module.exports = angular.module('mapping-service-module', [
 			},
 			getCenter: function getCenter() {
 				return _offsetCenter(_map.getCenter(), $window.innerWidth / 4);
+			},
+			removeRoutes: function() {
+				_map.data.forEach(function(feature) {
+					//If you want, check here for some constraints.
+					_map.data.remove(feature);
+				});
 			}
-		})
+		});
 	}]);

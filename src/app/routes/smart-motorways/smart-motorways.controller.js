@@ -21,16 +21,12 @@ module.exports = angular.module('smart-motorway-controller.module', [
 				MappingService.bindEvent('rightclick', ctrl.rightClick);
 			},
 			compute: function compute() {
+				MappingService.removeRoutes();
 				return RouteService.compute()
 					.then(function (route) {
 						//RouteService.drawRoute(route.google);
 						//						console.log(route.google.toJSON());
-						MappingService.map().data.addGeoJson(route.geoJSON);
-						MappingService.map().data.setStyle({
-							strokeColor: 'blue',
-							strokeOpacity: 0.2,
-							strokeWeight: 10
-						})
+						MappingService.drawRoute(route);
 					});
 			},
 			leftClick: function leftClict(event) {
@@ -39,11 +35,25 @@ module.exports = angular.module('smart-motorway-controller.module', [
 			rightClick: function rightClick(event) {
 				RouteService.showEndPoint(event.latLng);
 			},
-			startPoint: function () {
+			startPoint: function (val) {
+				if (arguments.length) {
+					MappingService.removeRoutes();
+					RouteService.startPoint().geocode = val;
+					RouteService.startPoint().marker.setPosition(val.geometry.location);
+				}
+
 				return RouteService.startPoint();
 			},
-			endPoint: function () {
+			endPoint: function (val) {
+				if (arguments.length) {
+					MappingService.removeRoutes();
+					RouteService.endPoint().geocode = val;
+					RouteService.endPoint().marker.setPosition(val.geometry.location);
+				}
 				return RouteService.endPoint();
+			},
+			save: function() {
+
 			},
 			modelOptions: {
 				getterSetter: true

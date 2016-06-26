@@ -1,41 +1,42 @@
 <div ng-init="ctrl.init()">
-	<h2>Smart motorways</h2>
-
-	
-	<div class="row pannel">
-			<span class="col-md-4">Start point</span>
-			<div class="col-md-8">
-				<div class="btn-group" uib-dropdown dropdown-append-to-body>
-					<button id="btn-append-to-body" type="button" class="btn btn-primary" uib-dropdown-toggle>
-	  	      {{ctrl.startPoint().geocode.formatted_address}} <span class="caret"></span>
-		      </button>
-					<ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
-		        <li ng-repeat="point in ctrl.startPoint().geocodePoints">
-		          <a ng-click="ctrl.startPoint(point)">{{point.formatted_address}}</a>
-		        </li>
-		      </ul>
-	      </div>
-	   </div>
-	</div>
-
-	<div class="row">
-			<span class="col-md-4">End point</span>
-			<div class="col-md-8">
-				<div class="btn-group" uib-dropdown dropdown-append-to-body>
-						<button id="btn-append-to-body" type="button" class="btn btn-primary" uib-dropdown-toggle>
-		  	      {{ctrl.endPoint().geocode.formatted_address}} <span class="caret"></span>
-			      </button>
-						<ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
-			        <li ng-repeat="point in ctrl.endPoint().geocodePoints">
-			          <a ng-click="ctrl.endPoint(point)">{{point.formatted_address}}</a>
-			        </li>
-			      </ul>
-	      </div>
+  <h2>Smart motorways</h2>
+  <div class="row pannel">
+    <span class="col-md-4">Start point</span>
+    <div class="col-md-8">
+      <div class="btn-group" uib-dropdown dropdown-append-to-body>
+        <button id="btn-append-to-body" type="button" class="btn btn-primary" uib-dropdown-toggle>
+          {{ctrl.startPoint().geocode.formatted_address}} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
+          <li ng-repeat="point in ctrl.startPoint().geocodePoints">
+            <a ng-click="ctrl.startPoint(point)">{{point.formatted_address}}</a>
+          </li>
+        </ul>
       </div>
-	</div>
+    </div>
+  </div>
+  <div class="row">
+    <span class="col-md-4">End point</span>
+    <div class="col-md-8">
+      <div class="btn-group" uib-dropdown dropdown-append-to-body>
+        <button id="btn-append-to-body" type="button" class="btn btn-primary" uib-dropdown-toggle>
+          {{ctrl.endPoint().geocode.formatted_address}} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
+          <li ng-repeat="point in ctrl.endPoint().geocodePoints">
+            <a ng-click="ctrl.endPoint(point)">{{point.formatted_address}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <button  type="button" class="btn btn-primary" ng-click="ctrl.compute()">Compute Route</button>
+    </div>
+    <div class="col-md-6">
+      <button type="button" class="btn btn-danger" ng-click="ctrl.save()">Save</button>
+    </div>
 
-	<div class="row">
-	<button ng-click="ctrl.compute()">Compute Route</button>
-
-	</div>
+  </div>
 </div>
