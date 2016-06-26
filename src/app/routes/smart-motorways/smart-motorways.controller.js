@@ -13,8 +13,6 @@ module.exports = angular.module('smart-motorway-controller.module', [
 			_startPoint = new RoutePoint(),
 			_endPoint = new RoutePoint();
 
-
-
 		_.extend(ctrl, {
 			init: function init() {
 				// bind left click for start point
@@ -24,8 +22,15 @@ module.exports = angular.module('smart-motorway-controller.module', [
 			},
 			compute: function compute() {
 				return RouteService.compute()
-					.then(function(route) {
-						console.log(route);
+					.then(function (route) {
+						//RouteService.drawRoute(route.google);
+						//						console.log(route.google.toJSON());
+						MappingService.map().data.addGeoJson(route.geoJSON);
+						MappingService.map().data.setStyle({
+							strokeColor: 'blue',
+							strokeOpacity: 0.2,
+							strokeWeight: 10
+						})
 					});
 			},
 			leftClick: function leftClict(event) {
@@ -34,10 +39,10 @@ module.exports = angular.module('smart-motorway-controller.module', [
 			rightClick: function rightClick(event) {
 				RouteService.showEndPoint(event.latLng);
 			},
-			startPoint:function() {
+			startPoint: function () {
 				return RouteService.startPoint();
 			},
-			endPoint:function() {
+			endPoint: function () {
 				return RouteService.endPoint();
 			},
 			modelOptions: {
