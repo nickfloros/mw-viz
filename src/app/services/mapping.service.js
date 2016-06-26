@@ -63,6 +63,15 @@ module.exports = angular.module('mapping-service-module', [
 			breakDownMarker: function breakdownMarkerAcessor(val) {
 				return arguments.length ? _breakdownMarker = val : _breakdownMarker;
 			},
+			showMarker: function showMarker( latLng, icon) {
+
+				marker = new google.maps.Marker({
+    			position: latLng,
+    			map: _map,
+    			icon : icon
+			  });
+			  return marker;
+			},
 			heatmap: function heatmapAcessor(val) {
 				if (arguments.length) {
 					_heatmap = val
