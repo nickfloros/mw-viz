@@ -11,6 +11,7 @@ module.exports = angular.module('mapping-service-module', [
 		var svc = this,
 			_directionsDisplay,
 			_map,
+			_osmWays = [];
 			_mapEvents = {
 				click: null,
 				rightclick: null,
@@ -103,6 +104,32 @@ module.exports = angular.module('mapping-service-module', [
 					strokeOpacity: 0.2,
 					strokeWeight: 10
 				});
+			},
+			osmJunction : function (node) {
+				var marker = new google.maps.Marker({
+			    position: {lat : node.lat, lng: node.lon},
+				    icon: {
+				      path: google.maps.SymbolPath.CIRCLE,
+				      scale: 10
+				    },
+				    draggable: false,
+				    map: _map
+				  });
+			},
+			osmWay : function(coordinates) {
+        // Create the polyline and add the symbol via the 'icons' property.
+        var line = new google.maps.Polyline({
+          path: coordinates,
+          icons: [{
+            icon: {
+		          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+    		    },
+            offset: '100%'
+          }],
+          map: _map
+        });
+   //     osmWay.push(line);
+        return line;
 			},
 			directionsDisplay: function directionsDisplayAccessor() {
 				return _directionsDisplay;
