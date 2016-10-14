@@ -6,7 +6,7 @@ module.exports = angular.module('osrm-controller-module', [
 		require('../../services/mapping.service').name,
 		require('../../services/osrm.service').name,
 	])
-	.controller('osrmController', ['MappingService', 'OSRMService', function (MappingService, OSRMService) {
+	.controller('osrmController', ['MappingService', 'OSRMService', function (MappingService, OSMService) {
 		var ctrl = this,
 			_toggleBoundingBox = 0;
 
@@ -22,11 +22,16 @@ module.exports = angular.module('osrm-controller-module', [
 				return arguments.length ? _toggleBoundingBox = val : _toggleBoundingBox;
 			},
 			getOSRM : function() {
-				return OSRMService.road('M271')
+				return OSMService.road('M271')
 					.then(function (outcome) {
 						if(outcome) { // we have something we need now to render 
-							_.forEach(OSRMService.ways(), function (way) {
-								MappingService.osmWay(way.nodeList);
+							MappingService.clean();
+							_.forEach(OSMService.ways(), function (way) {
+								MappingService.osmWay(way.path);
+							});
+
+							_.forEach(OSMService.junctions(), function (junction) {
+								MappingService.osmJunction(junction);
 							});
 						}
 					});

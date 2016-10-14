@@ -5,6 +5,7 @@ var _=require('lodash');
 module.exports=angular.module('osrm-service-module',[])
 	.service('OSRMService',['$http', function($http) {
 		var _svc = this;
+			_junctions = [];
 			_nodes = [],
 			_ways=[];
 
@@ -40,36 +41,30 @@ module.exports=angular.module('osrm-service-module',[])
 					}
 				})
 				.then(function (resp) {
-						var idx;
-						// slit input to node  / ways 
-						_.forEach(resp.data.elements, function (elem) {
-							switch(elem.type) {
-								case 'node' : 
-								_nodes.push(elem);
-								break;
-								case 'way' : 
-								_ways.push(elem);
-								break;
-							}
+						_junctions = []; // empty junction list ..
+						_ways = resp.data;
+
+						_.forEach(_ways, function (segment) {
+							_.forEach(segment.path, function (node) {
+								if (node.tags && node.tags.highway==='motorway_junction') {
+									if (!_.find(_junctions, function(junction) {
+										return node.id === junction.id;
+									})) {
+										_junctions.push(node);
+										console.log(node.id);
+									}
+								}
+							});
 						});
-						// link ways to nodes ..
-						_.forEach(_ways, function (way) {
-								// add list of nodes ..
-								way['nodeList'] = [];
-								_.forEach(way.nodes, function(node) {
-										idx = _.findIndex(_nodes, function (n) {
-											return n.id ===node;
-										});
-										way.nodeList.push({lat : _nodes[idx].lat, 
-												lng : _nodes[idx].lon});
-								});
-						})
 
 						return true;
 					});
 			},
 			nodes : function() {
 				return _nodes;
+			},
+			junctions : function() {
+				return _junctions;
 			},
 			ways : function() {
 				return _ways;
