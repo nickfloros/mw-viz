@@ -35,10 +35,10 @@ module.exports=angular.module('osrm-service-module',[])
 			},
 			road : function(roadName) {
 
-				return $http.get('/api/osm', {
-					params : {
-						roadName : roadName
-					}
+				return $http.get('api/openStreet/road/M271', {
+				/*params : {
+					roadName : 'roadName'
+				}*/
 				})
 				.then(function (resp) {
 						_junctions = []; // empty junction list ..

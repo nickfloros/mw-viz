@@ -34,7 +34,7 @@ module.exports = angular.module('mapping-service-module', [
 				_directionsDisplay = new google.maps.DirectionsRenderer();
 				_directionsDisplay.setMap(_map);
 			},
-			removeAllEvents: function() {
+			removeAllEvents: function () {
 				if (_mapEvents.click) {
 					google.maps.event.removeListener(_mapEvents.click);
 					_mapEvents.click = null;
@@ -44,7 +44,7 @@ module.exports = angular.module('mapping-service-module', [
 					_mapEvents.rightclick = null;
 				}
 			},
-			bindEvent: function(eventType, cbFunction) {
+			bindEvent: function (eventType, cbFunction) {
 				if (_mapEvents[eventType]) {
 					google.maps.event.removeListener(_mapEvents[eventType]);
 					_mapEvents[eventType] = null;
@@ -54,7 +54,7 @@ module.exports = angular.module('mapping-service-module', [
 					_mapEvents[eventType] = google.maps.event.addListener(_map, eventType, cbFunction);
 				}
 			},
-			boundingBox: function() {
+			boundingBox: function () {
 				return BoundingBoxService;
 			},
 			data: function dataAcessor() {},
@@ -83,21 +83,21 @@ module.exports = angular.module('mapping-service-module', [
 			},
 			geocodeList: GeocoderService.results,
 			selectedPlace: PlacesService.selectedPlace,
-			reset: function() {
+			reset: function () {
 				PlacesService.reset();
 				GeocoderService.reset();
 			},
-			geocode: function(latLng) {
+			geocode: function (latLng) {
 				PlacesService.search(_map, latLng, 100);
 				return GeocoderService.search(_map, latLng);
 			},
 			removePOI: function removePOI() {
-				_map.data.forEach(function(feature) {
+				_map.data.forEach(function (feature) {
 					_map.data.remove(feature);
 
 				});
 			},
-			drawRoute: function(route) {
+			drawRoute: function (route) {
 				_map.data.addGeoJson(route.geoJSON);
 				_map.data.setStyle({
 					strokeColor: 'blue',
@@ -105,49 +105,52 @@ module.exports = angular.module('mapping-service-module', [
 					strokeWeight: 10
 				});
 			},
-			osmJunction : function (node) {
+			osmJunction: function (node) {
 				var marker = new google.maps.Marker({
-			    position: {lat : node.lat, lng: node.lng},
-			     label: 'J'+node.tags.ref,
-/*				    icon: {
-				      path: google.maps.SymbolPath.CIRCLE,
-				      scale: 10
-				    },
-				    draggable: false,
-*/				    map: _map
-				  });
+					position: {
+						lat: node.lat,
+						lng: node.lng
+					},
+					label: 'J' + node.tags.ref,
+					/*				    icon: {
+									      path: google.maps.SymbolPath.CIRCLE,
+									      scale: 10
+									    },
+									    draggable: false,
+					*/
+					map: _map
+				});
 
-				marker.addListener('click', function() {
-					var infowindow =  new google.maps.InfoWindow({
-  	        content: 'J' + node.tags.ref
-	        });
-          infowindow.open(map, marker);
-        });
-				console.log(node);
+				marker.addListener('click', function () {
+					var infowindow = new google.maps.InfoWindow({
+						content: 'J' + node.tags.ref
+					});
+					infowindow.open(_map, marker);
+				});
 				_osmWay.push(marker);
 			},
-			clean : function() {
+			clean: function () {
 				// remove reference to
-				_.forEach(_osmWay,function (item) {
+				_.forEach(_osmWay, function (item) {
 					item.map = null;
 				});
 				// now empty array
 				_osmWay = [];
 			},
-			osmWay : function(coordinates) {
-        // Create the polyline and add the symbol via the 'icons' property.
-        var line = new google.maps.Polyline({
-          path: coordinates,
-          icons: [{
-            icon: {
-		          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
-    		    },
-            offset: '100%'
-          }],
-          map: _map
-        });
-			  _osmWay.push(line);
-        return line;
+			osmWay: function (coordinates) {
+				// Create the polyline and add the symbol via the 'icons' property.
+				var line = new google.maps.Polyline({
+					path: coordinates,
+					icons: [{
+						icon: {
+							path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+						},
+						offset: '100%'
+					}],
+					map: _map
+				});
+				_osmWay.push(line);
+				return line;
 			},
 			directionsDisplay: function directionsDisplayAccessor() {
 				return _directionsDisplay;
@@ -158,8 +161,8 @@ module.exports = angular.module('mapping-service-module', [
 			getCenter: function getCenter() {
 				return _offsetCenter(_map.getCenter(), $window.innerWidth / 4);
 			},
-			removeRoutes: function() {
-				_map.data.forEach(function(feature) {
+			removeRoutes: function () {
+				_map.data.forEach(function (feature) {
 					//If you want, check here for some constraints.
 					_map.data.remove(feature);
 				});
