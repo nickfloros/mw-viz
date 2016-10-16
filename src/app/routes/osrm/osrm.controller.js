@@ -5,8 +5,9 @@ var _ = require('lodash');
 module.exports = angular.module('osrm-controller-module', [
 		require('../../services/mapping.service').name,
 		require('../../services/osrm.service').name,
+		require('../../services/highway-agency.service').name,
 	])
-	.controller('osrmController', ['MappingService', 'OSRMService', function (MappingService, OSMService) {
+	.controller('osrmController', ['MappingService', 'OSRMService', 'HighwayAgencyService', function (MappingService, OSMService, HighwayAgencyService) {
 		var ctrl = this,
 			_toggleBoundingBox = 0;
 
@@ -21,10 +22,11 @@ module.exports = angular.module('osrm-controller-module', [
 				}
 				return arguments.length ? _toggleBoundingBox = val : _toggleBoundingBox;
 			},
-			getOSRM : function() {
-				return OSMService.road('M271')
+			getOSRM: function () {
+				return OSMService.road('M271') // just work with m271
 					.then(function (outcome) {
-						if(outcome) { // we have something we need now to render 
+						if (outcome) { // we have something we need now to render 
+
 							MappingService.clean();
 							_.forEach(OSMService.ways(), function (way) {
 								MappingService.osmWay(way.path);
@@ -33,11 +35,20 @@ module.exports = angular.module('osrm-controller-module', [
 							_.forEach(OSMService.junctions(), function (junction) {
 								MappingService.osmJunction(junction);
 							});
+
+							MappingService.fitBounds(OSMService.boundingBox());
+							MappingService.setMapBounds();
 						}
+					})
+			},
+			getHAData: function () {
+				HighwayAgencyService.box(OSMService.boundingBox())
+					.then(function (data) {
+
 					});
 			},
-			boundingBox : function() {
-				return MappingService.boundingBox().bounds();
+			boundingBox: function () {
+				return MappingService.boundingBox();
 			},
 			modelOptions: {
 				getterSetter: true

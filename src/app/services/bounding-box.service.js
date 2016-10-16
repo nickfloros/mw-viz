@@ -20,6 +20,12 @@ module.exports = angular.module('bounding-box-service-module', [])
 			});
 
 		_.extend(svc, {
+			roadBoundingBox: function (box) {
+				_bounds.north = box.ne.lat;
+				_bounds.south = box.sw.lat;
+				_bounds.east = box.ne.lng;
+				_bounds.west = box.sw.lng;
+			},
 			enable: function enableBoundingBox(map) {
 				_rightClickEvent = map.addListener('rightclick', function (event) {
 					_bounds = {
@@ -45,7 +51,7 @@ module.exports = angular.module('bounding-box-service-module', [])
 			dissable: function dissableBoundingBox(map) {
 				_rectangle.setDraggable(false);
 				google.maps.event.removeListener(_rightClickEvent);
-				_rightClickEvent=null;
+				_rightClickEvent = null;
 				if (_eventListener) {
 					google.maps.event.removeListener(_eventListener);
 					_eventListener = null;
@@ -58,8 +64,14 @@ module.exports = angular.module('bounding-box-service-module', [])
 				_rectangle.bounds.west = latLng.lng();
 
 			},
+			LatLngBounds: function LatLngBounds() {
+				var latLngBounds = new google.maps.LatLngBounds();
+				latLngBounds.extend(new google.maps.LatLng(_bounds.north, _bounds.east));
+				latLngBounds.extend(new google.maps.LatLng(_bounds.south, _bounds.west));
+				return latLngBounds;
+			},
 			bounds: function bounds(val) {
-				return arguments.length ? _bounds = bounds : _bounds;
+				return arguments.length ? _bounds = val : _bounds;
 			},
 			freeze: function () {
 

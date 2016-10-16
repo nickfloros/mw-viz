@@ -54,8 +54,18 @@ module.exports = angular.module('mapping-service-module', [
 					_mapEvents[eventType] = google.maps.event.addListener(_map, eventType, cbFunction);
 				}
 			},
+			fitBounds: function (roadBounds) {
+				if (arguments.length > 0) {
+					BoundingBoxService.roadBoundingBox(roadBounds);
+				}
+				// move map so it fits the box 
+				//;
+			},
+			setMapBounds: function () {
+				_map.fitBounds(BoundingBoxService.LatLngBounds());
+			},
 			boundingBox: function () {
-				return BoundingBoxService;
+				return BoundingBoxService.bounds();
 			},
 			data: function dataAcessor() {},
 			map: function mapAcessor(val) {

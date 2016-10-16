@@ -1,57 +1,30 @@
 require('angular');
 
-var _=require('lodash');  
+var _ = require('lodash');
 
-module.exports=angular.module('osrm-service-module',[])
-	.service('OSRMService',['$http', function($http) {
-		var _svc = this;
-			_junctions = [];
-			_nodes = [],
-			_ways=[];
+module.exports = angular.module('osrm-service-module', [])
+	.service('OSRMService', ['$http', function ($http) {
+		var _svc = this,
+			_junctions = [],
+			_boundingBox,
+			_ways = [];
 
 		_.extend(_svc, {
-			find : function(bounds) {
-				return $http.post('/api/osrm', {
-					bounds : bounds.toJSON()
-				})
-				.then(function (resp) {
-
-					});
-			},
-			wayCoordinates : function(way) {
-				var coordinates = [], 
-					idx = 0;
-				_.forEach(way.nodes, function (nId) {
-					node = _.find(_nodes, function (n) {
-						return n.id === nId;
-					});
-					coordinates.push({lat: 50.924949,
-														lng: -1.4707322});
-				});
-				return coordinates;
-			},
-			junctions : function(node) {
-
-			},
-			road : function(roadName) {
-
-				return $http.get('api/openStreet/road/M271', {
-				/*params : {
-					roadName : 'roadName'
-				}*/
-				})
-				.then(function (resp) {
+			road: function (roadName) {
+				return $http.get('api/openStreet/road/' + roadName)
+					.then(function (resp) {
 						_junctions = []; // empty junction list ..
-						_ways = resp.data;
-
+						_ways = resp.data.roadSegments;
+						_boundingBox = resp.data.boundingBox;
 						_.forEach(_ways, function (segment) {
 							_.forEach(segment.path, function (node) {
-								if (node.tags && node.tags.highway==='motorway_junction') {
-									if (!_.find(_junctions, function(junction) {
-										return node.id === junction.id;
-									})) {
+								// pull junctions out of the list 
+								if (node.tags && node.tags.highway === 'motorway_junction') {
+									// add junction to the list if is not in already
+									if (!_.find(_junctions, function (junction) {
+											return node.id === junction.id;
+										})) {
 										_junctions.push(node);
-										console.log(node.id);
 									}
 								}
 							});
@@ -60,20 +33,15 @@ module.exports=angular.module('osrm-service-module',[])
 						return true;
 					});
 			},
-			nodes : function() {
-				return _nodes;
-			},
-			junctions : function() {
+			junctions: function () {
 				return _junctions;
 			},
-			ways : function() {
+			ways: function () {
 				return _ways;
 			},
-			findNode : function(id) {
-				return _.find(nodes, function(item) {
-					return item.id = id;
-				});
-			}
+			boundingBox: function (val) {
+				return arguments.length > 0 ? _boundingBox = val : _boundingBox;
+			},
 		});
 
-}]);
+	}]);
